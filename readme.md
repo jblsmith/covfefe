@@ -1,6 +1,6 @@
 # Tweet analysis by synthesis
 
-On May 30th, 2017, Donald Trump tweeted: "Despite the constant negative press covfefe". The tweet raised a hundred questions, for which thousands of punchlines were provided. Above all, we wanted to know: *what was Trump trying to type*?
+On May 31st, 2017, Donald Trump tweeted: "Despite the constant negative press covfefe". The tweet raised a hundred questions, for which thousands of punchlines were provided. Above all, we wanted to know: *what was Trump trying to type*?
 
 We can speculate in a type of "analysis by synthesis". We first create a machine capable of generated random Trump tweets word by word, according to the probability of word pairs in previous tweets. Then we provide the machine with the seed, "Despite the constant negative press", and see what it creates.
 
