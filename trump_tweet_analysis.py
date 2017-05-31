@@ -58,12 +58,13 @@ def generate_next_word(grammar, word):
 
 # Load all the tweets into a list
 archive_path = "./trump_tweet_data_archive-master"
+# NB: all tweets were obtained from https://github.com/bpb27/trump_tweet_data_archive
 tweets = []
 for year in range(2009,2018):
     archive = archive_path + "/condensed_" + str(year) + ".json"
     jarch = json.load(open(archive,'r'))
     for tweet in jarch:
-        tweets.append(tweet['text'])
+        tweets.append(re.sub('\n',' ',tweet['text']))
 
 # Clean the tweets: strip punctuation, replace punctuation words with words, recognize links, etc.
 clean_tweets = [[clean_word(word) for word in ['START']+tweet.lower().split(" ")+['STOP']] for tweet in tweets]
@@ -72,7 +73,7 @@ clean_tweets = [[word for word in tweet if len(word)>0] for tweet in clean_tweet
 # Pull all the links into a single list:
 link_list = scrape_links(tweets)
 # Get a rough sense of how long the tweets usually are:
-tweet_lengths = [len(tweet) for tweet in clean_tweets if len(tweet)>=6]
+tweet_lengths = np.array([len(tweet) for tweet in clean_tweets if len(tweet)])
 
 # It might be useful to have a flattened list of words and unique vocabulary list:
 all_words = [word for tweet in clean_tweets for word in tweet]
@@ -110,8 +111,9 @@ def post_process_tweet(tweet, link_list):
     new_tweet = " ".join(unclean_word(word, link_list) for word in words if word != "STOP")
     return new_tweet
 
-for j in range(90):
-    new_len = random.choice(tweet_lengths)
+for j in range(100):
+    new_len = random.choice(tweet_lengths[tweet_lengths>10])
     # [np.random.randint(len(tweet_lengths))]
     new_tweet = write_new_tweet(bigrammar,"Despite the constant negative press",new_len)
-    print post_process_tweet(new_tweet, link_list)
+    print "- " + post_process_tweet(new_tweet, link_list)
+
